@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tamang_food_service/screens/signin_screen.dart';
 //import 'package:google_fonts/google_fonts.dart';
 
@@ -11,7 +12,8 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePageScreen> {
-  void logOut() async {
+  void signOut() async {
+    await GoogleSignIn().signOut();
     await FirebaseAuth.instance.signOut();
     Navigator.popUntil(context, (route) => route.isFirst);
     Navigator.pushReplacement(
@@ -29,7 +31,7 @@ class _HomePageState extends State<HomePageScreen> {
         title: const Text("Home"),
         actions: [
           IconButton(
-            onPressed: logOut,
+            onPressed: signOut,
             icon: const Icon(Icons.exit_to_app),
           ),
         ],

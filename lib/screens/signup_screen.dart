@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tamang_food_service/screens/homepage_screen.dart';
 import 'package:tamang_food_service/screens/signin_screen.dart';
 import 'package:tamang_food_service/screens/widget/custom_button.dart';
@@ -56,6 +57,19 @@ class _SignUpState extends State<SignUpScreen> {
         print(e.code.toString());
       }
     }
+  }
+
+  void login() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   @override
@@ -221,7 +235,43 @@ class _SignUpState extends State<SignUpScreen> {
                   ),
                 ),
                 const SizedBox(height: 40),
-                Image.asset('assets/Social accounts.png'),
+                Center(
+                  child: Text(
+                    'Or',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black.withOpacity(0.7),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 40),
+                Row(
+                  mainAxisSize:
+                      MainAxisSize.max, // Adjust size based on content
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        login();
+                      },
+                      child: Image.asset(
+                        'assets/google.png',
+                        width: 48,
+                        height: 48,
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    InkWell(
+                      onTap: () {},
+                      child: Image.asset(
+                        'assets/applelogo.png',
+                        width: 50,
+                        height: 50,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

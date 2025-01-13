@@ -195,7 +195,40 @@ class _SigninState extends State<SigninScreen> {
                   ],
                 ),
                 const SizedBox(height: 40),
-                Image.asset('assets/Social accounts.png'),
+                Text(
+                  'Or',
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black.withOpacity(0.7),
+                  ),
+                ),
+                // Image.asset('assets/Social accounts.png'),
+                const SizedBox(height: 40),
+                Row(
+                  mainAxisSize:
+                      MainAxisSize.max, // Adjust size based on content
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {},
+                      child: Image.asset(
+                        'assets/google.png',
+                        width: 48, // Set image width
+                        height: 48, // Set image height
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    InkWell(
+                      onTap: () {},
+                      child: Image.asset(
+                        'assets/applelogo.png',
+                        width: 50, // Set image width
+                        height: 50, // Set image height
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "647745416630",
     "project_id": "tamang-food-service-ff9ab",
-    "storage_bucket": "tamang-food-service-ff9ab.appspot.com"
+    "storage_bucket": "tamang-food-service-ff9ab.firebasestorage.app"
   },
   "client": [
     {
@@ -12,7 +12,12 @@
           "package_name": "com.example.tamang_food_service"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "647745416630-5kfek570v1rs7d8hhgk0edkqnh4kciob.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCHU7Cyq1kUBPxkAS0q8PVjBM130vDnZNY"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "647745416630-5kfek570v1rs7d8hhgk0edkqnh4kciob.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
