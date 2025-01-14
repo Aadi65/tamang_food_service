@@ -46,7 +46,7 @@ class _SignUpState extends State<SignUpScreen> {
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
         if (userCredential.user != null) {
-          Navigator.pop(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => const HomePageScreen(),
@@ -60,16 +60,37 @@ class _SignUpState extends State<SignUpScreen> {
   }
 
   void login() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+      if (googleUser == null) {
+        // User canceled the sign-in
+        return;
+      }
 
-    await FirebaseAuth.instance.signInWithCredential(credential);
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      if (userCredential.user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomePageScreen(),
+          ),
+        );
+      }
+    } catch (e) {
+      // Handle errors (e.g., network issues, authentication failure)
+      print("Error during login: $e");
+    }
   }
 
   @override
@@ -177,8 +198,14 @@ class _SignUpState extends State<SignUpScreen> {
                         color: Colors.black,
                       ),
                     ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8), // Adjust the radius as needed
+                      ),
+                    ),
                   ),
                 ),
+                const SizedBox(height: 25),
                 TextField(
                   controller: emailController,
                   decoration: const InputDecoration(
@@ -196,8 +223,14 @@ class _SignUpState extends State<SignUpScreen> {
                         color: Colors.black,
                       ),
                     ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8), // Adjust the radius as needed
+                      ),
+                    ),
                   ),
                 ),
+                const SizedBox(height: 25),
                 TextField(
                   controller: passwordController,
                   decoration: const InputDecoration(
@@ -213,6 +246,11 @@ class _SignUpState extends State<SignUpScreen> {
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
                         color: Colors.black,
+                      ),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8), // Adjust the radius as needed
                       ),
                     ),
                   ),

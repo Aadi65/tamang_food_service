@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "647745416630-7j5l5d580km0919dtqnid98gbdmkuj22.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tamang_food_service",
+            "certificate_hash": "684765c4f447200699c9a37b1b9c897d6cd875ad"
+          }
+        },
+        {
           "client_id": "647745416630-5kfek570v1rs7d8hhgk0edkqnh4kciob.apps.googleusercontent.com",
           "client_type": 3
         }

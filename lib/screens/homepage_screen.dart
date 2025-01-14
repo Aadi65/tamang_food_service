@@ -7,7 +7,7 @@ import 'package:tamang_food_service/screens/signin_screen.dart';
 class HomePageScreen extends StatefulWidget {
   const HomePageScreen({super.key});
   @override
-  // ignore: library_private_types_in_public_api
+// ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 

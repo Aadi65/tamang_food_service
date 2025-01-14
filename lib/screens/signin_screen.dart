@@ -113,8 +113,14 @@ class _SigninState extends State<SigninScreen> {
                         color: Colors.black,
                       ),
                     ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8), // Adjust the radius as needed
+                      ),
+                    ),
                   ),
                 ),
+                const SizedBox(height: 25),
                 TextField(
                   controller: passwordController,
                   decoration: const InputDecoration(
@@ -130,6 +136,11 @@ class _SigninState extends State<SigninScreen> {
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
                         color: Colors.black,
+                      ),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8), // Adjust the radius as needed
                       ),
                     ),
                   ),
