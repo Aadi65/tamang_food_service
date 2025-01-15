@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tamang_food_service/database.dart';
 import 'package:tamang_food_service/screens/forgetpassword_screen.dart';
 import 'package:tamang_food_service/screens/homepage_screen.dart';
 import 'package:tamang_food_service/screens/signup_screen.dart';
 import 'package:tamang_food_service/screens/widget/custom_button.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});
@@ -15,7 +18,8 @@ class SigninScreen extends StatefulWidget {
 class _SigninState extends State<SigninScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
+  String password = "";
+  String email = "";
   void signin() async {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
@@ -27,11 +31,11 @@ class _SigninState extends State<SigninScreen> {
       );
     } else {
       try {
-        UserCredential userCredential = await FirebaseAuth.instance
+        UserCredential result = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
-        if (userCredential.user != null) {
-          Navigator.popUntil(context, (route) => route.isFirst);
-          Navigator.pushReplacement(
+        if (result.user != null) {
+          // Navigator.popUntil(context, (route) => route.isFirst);
+          Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const HomePageScreen(),
@@ -39,8 +43,93 @@ class _SigninState extends State<SigninScreen> {
           );
         }
       } on FirebaseException catch (e) {
-        print(e.code.toString());
+        if (e.code == 'user-not-found') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("No User Found for that Email"),
+            ),
+          );
+        } else if (e.code == 'wrong-password') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Wrong Password"),
+            ),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("An unexpected error occurred: $e"),
+          ),
+        );
       }
+    }
+  }
+
+  void login() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser == null) {
+        // User canceled the sign-in
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential result =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      if (result.user != null) {
+        // Check if the user exists in Firestore
+        String userId = result.user!.uid;
+
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection(
+                "User") // Replace "User" with your Firestore collection name
+            .doc(userId)
+            .get();
+
+        if (userDoc.exists) {
+          // User exists in Firestore
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomePageScreen(),
+            ),
+          );
+        } else {
+          // User doesn't exist in Firestore, sign them out
+          await FirebaseAuth.instance.signOut();
+          await GoogleSignIn().signOut();
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("No account found. Please sign up first."),
+            ),
+          );
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SignUpScreen(),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      // Handle errors (e.g., network issues, authentication failure)
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Error during login: $e"),
+        ),
+      );
     }
   }
 
@@ -59,7 +148,14 @@ class _SigninState extends State<SigninScreen> {
                   children: [
                     InkWell(
                       onTap: () {
-                        Navigator.pop(context);
+                        if (emailController.text != "" &&
+                            passwordController.text != "") {
+                          setState(() {
+                            email = emailController.text;
+                            password = passwordController.text;
+                          });
+                        }
+                        signin();
                       },
                       child: const Icon(
                         Icons.arrow_back_ios_new,
@@ -222,7 +318,9 @@ class _SigninState extends State<SigninScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        login();
+                      },
                       child: Image.asset(
                         'assets/google.png',
                         width: 48, // Set image width
