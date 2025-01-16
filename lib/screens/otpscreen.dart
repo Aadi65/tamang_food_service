@@ -81,7 +81,7 @@ class _OtpscreenState extends State<Otpscreen> {
                       color: Colors.black,
                     ),
                   ),
-                  const SizedBox(width: 80),
+                  const SizedBox(width: 105),
                   Text(
                     'Verify OTP',
                     style: GoogleFonts.poppins(

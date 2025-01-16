@@ -94,6 +94,7 @@ class _SignUpState extends State<SignUpScreen> {
     try {
       final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
       final GoogleSignIn googleSignIn = GoogleSignIn();
+      await googleSignIn.signOut();
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
       if (googleUser == null) {
@@ -159,231 +160,226 @@ class _SignUpState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Icon(
-                        Icons.arrow_back_ios_new,
-                        color: Colors.black,
+    // ignore: deprecated_member_use
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(width: 140),
+                      Text(
+                        'Sign Up',
+                        style: GoogleFonts.poppins(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 135),
-                    Text(
-                      'Sign Up',
-                      style: GoogleFonts.poppins(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  'Create Account ',
-                  style: GoogleFonts.poppins(
-                    fontSize: 35,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.black,
+                    ],
                   ),
-                ),
-                const SizedBox(height: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text:
-                                'Enter your Name, Email and Password for sign up.\n',
-                            style: GoogleFonts.poppins(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.black.withOpacity(0.5),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Create Account ',
+                    style: GoogleFonts.poppins(
+                      fontSize: 35,
+                      fontWeight: FontWeight.w300,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text:
+                                  'Enter your Name, Email and Password for sign up.\n',
+                              style: GoogleFonts.poppins(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.black.withOpacity(0.5),
+                              ),
                             ),
-                          ),
-                          WidgetSpan(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SigninScreen(),
+                            WidgetSpan(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const SigninScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Already have an account?',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.orange.withOpacity(0.7),
                                     ),
-                                  );
-                                },
-                                child: Text(
-                                  'Already have an account?',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.orange.withOpacity(0.7),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                TextField(
-                  controller: nameController,
-                  decoration: const InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-                    suffixIcon: Icon(
-                      Icons.check,
-                      color: Color(0xFFEEA734),
-                    ),
-                    label: Text(
-                      'FULL NAME',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black,
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  TextField(
+                    controller: nameController,
+                    decoration: const InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                      suffixIcon: Icon(
+                        Icons.check,
+                        color: Color(0xFFEEA734),
                       ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8), // Adjust the radius as needed
+                      label: Text(
+                        'FULL NAME',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8), // Adjust the radius as needed
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 25),
-                TextField(
-                  controller: emailController,
-                  decoration: const InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-                    suffixIcon: Icon(
-                      Icons.check,
-                      color: Color(0xFFEEA734),
-                    ),
-                    label: Text(
-                      'EMAIL ADDRESS',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black,
+                  const SizedBox(height: 25),
+                  TextField(
+                    controller: emailController,
+                    decoration: const InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                      suffixIcon: Icon(
+                        Icons.check,
+                        color: Color(0xFFEEA734),
                       ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8), // Adjust the radius as needed
+                      label: Text(
+                        'EMAIL ADDRESS',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 25),
-                TextField(
-                  controller: passwordController,
-                  decoration: const InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-                    suffixIcon: Icon(
-                      Icons.visibility_off,
-                      color: Color(0xFFEEA734),
-                    ),
-                    label: Text(
-                      'PASSWORD',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8), // Adjust the radius as needed
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8), // Adjust the radius as needed
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 25),
-                custom_button(
-                  onpressed: () {
-                    if (nameController.text != "" &&
-                        emailController.text != "" &&
-                        passwordController.text != "") {
-                      setState(() {
-                        email = emailController.text;
-                        name = nameController.text;
-                        password = passwordController.text;
-                      });
-                    }
-                    createAccount();
-                  },
-                  buttonText: 'SIGN UP ',
-                  fontsize: 19,
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  'By Signing up you agree to our Terms Conditions & Privacy Policy.',
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black.withOpacity(0.7),
+                  const SizedBox(height: 25),
+                  TextField(
+                    controller: passwordController,
+                    decoration: const InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                      suffixIcon: Icon(
+                        Icons.visibility_off,
+                        color: Color(0xFFEEA734),
+                      ),
+                      label: Text(
+                        'PASSWORD',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8), // Adjust the radius as needed
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                Center(
-                  child: Text(
-                    'Or',
+                  const SizedBox(height: 25),
+                  custom_button(
+                    onpressed: () {
+                      if (nameController.text != "" &&
+                          emailController.text != "" &&
+                          passwordController.text != "") {
+                        setState(() {
+                          email = emailController.text;
+                          name = nameController.text;
+                          password = passwordController.text;
+                        });
+                      }
+                      createAccount();
+                    },
+                    buttonText: 'SIGN UP ',
+                    fontsize: 19,
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'By Signing up you agree to our Terms Conditions & Privacy Policy.',
                     style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 17,
                       fontWeight: FontWeight.w400,
                       color: Colors.black.withOpacity(0.7),
                     ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisSize:
-                      MainAxisSize.max, // Adjust size based on content
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        login();
-                      },
-                      child: Image.asset(
-                        'assets/google.png',
-                        width: 48,
-                        height: 48,
+                  const SizedBox(height: 10),
+                  Center(
+                    child: Text(
+                      'Or',
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black.withOpacity(0.7),
                       ),
                     ),
-                    const SizedBox(width: 20),
-                    InkWell(
-                      onTap: () {},
-                      child: Image.asset(
-                        'assets/applelogo.png',
-                        width: 50,
-                        height: 50,
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisSize:
+                        MainAxisSize.max, // Adjust size based on content
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          login();
+                        },
+                        child: Image.asset(
+                          'assets/google.png',
+                          width: 48,
+                          height: 48,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      const SizedBox(width: 20),
+                      InkWell(
+                        onTap: () {},
+                        child: Image.asset(
+                          'assets/applelogo.png',
+                          width: 50,
+                          height: 50,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

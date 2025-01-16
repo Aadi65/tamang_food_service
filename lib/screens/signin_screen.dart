@@ -146,22 +146,6 @@ class _SigninState extends State<SigninScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    InkWell(
-                      onTap: () {
-                        if (emailController.text != "" &&
-                            passwordController.text != "") {
-                          setState(() {
-                            email = emailController.text;
-                            password = passwordController.text;
-                          });
-                        }
-                        signin();
-                      },
-                      child: const Icon(
-                        Icons.arrow_back_ios_new,
-                        color: Colors.black,
-                      ),
-                    ),
                     const SizedBox(width: 135),
                     Text(
                       'Sign In',
@@ -263,6 +247,13 @@ class _SigninState extends State<SigninScreen> {
                 const SizedBox(height: 25),
                 custom_button(
                   onpressed: () {
+                    if (emailController.text != "" &&
+                        passwordController.text != "") {
+                      setState(() {
+                        email = emailController.text;
+                        password = passwordController.text;
+                      });
+                    }
                     signin();
                   },
                   buttonText: 'SIGN IN ',
