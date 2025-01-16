@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tamang_food_service/database.dart';
 import 'package:tamang_food_service/screens/homepage_screen.dart';
+import 'package:tamang_food_service/screens/phoneNumberScreen.dart';
 import 'package:tamang_food_service/screens/signin_screen.dart';
 import 'package:tamang_food_service/screens/widget/custom_button.dart';
 
@@ -17,18 +19,15 @@ class _SignUpState extends State<SignUpScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
 
   String email = "";
   String name = "";
   String password = "";
-  String phone = "";
 
   void createAccount() async {
     String name = nameController.text.trim();
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
-    String phone = phoneController.text.trim();
 
     bool isValidEmail(String email) {
       // Regular expression for validating an email
@@ -37,14 +36,13 @@ class _SignUpState extends State<SignUpScreen> {
       return regex.hasMatch(email);
     }
 
-    if (name == "" || email == "" || password == "" || phone == "") {
+    if (name == "" || email == "" || password == "") {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Please fill all the details"),
         ),
       );
-    }
-    if (!isValidEmail(email)) {
+    } else if (!isValidEmail(email)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Please enter a valid email address!"),
@@ -58,7 +56,7 @@ class _SignUpState extends State<SignUpScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const HomePageScreen(),
+              builder: (context) => const Phonenumberscreen(),
             ),
           );
         }
@@ -77,8 +75,8 @@ class _SignUpState extends State<SignUpScreen> {
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Error: ${e.message}"),
+            const SnackBar(
+              content: Text("Error"),
             ),
           );
         }
@@ -117,22 +115,41 @@ class _SignUpState extends State<SignUpScreen> {
       User? userdetails = result.user;
 
       if (result.user != null) {
-        Map<String, dynamic> userInfoMap = {
-          "email": userdetails!.email,
-          "name": userdetails.displayName,
-          "imgUrl": userdetails.photoURL,
-          "id": userdetails.uid,
-          "phoneNumber": userdetails.phoneNumber,
-        };
-        await DatabaseMethods()
-            .addUser(userdetails.uid, userInfoMap)
-            .then((value) {});
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomePageScreen(),
-          ),
-        );
+        // Check if the user exists in Firestore
+        String userId = result.user!.uid;
+
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection(
+                "User") // Replace "User" with your Firestore collection name
+            .doc(userId)
+            .get();
+
+        if (userDoc.exists) {
+          // User exists in Firestore
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("This account is already registered"),
+            ),
+          );
+        } else if (result.user != null) {
+          // User doesn't exist in Firestore, sign them out
+          Map<String, dynamic> userInfoMap = {
+            "email": userdetails!.email,
+            "name": userdetails.displayName,
+            "imgUrl": userdetails.photoURL,
+            "id": userdetails.uid,
+            "phoneNumber": userdetails.phoneNumber,
+          };
+          await DatabaseMethods()
+              .addUser(userdetails.uid, userInfoMap)
+              .then((value) {});
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const Phonenumberscreen(),
+            ),
+          );
+        }
       }
     } catch (e) {
       // Handle errors (e.g., network issues, authentication failure)
@@ -279,31 +296,6 @@ class _SignUpState extends State<SignUpScreen> {
                 ),
                 const SizedBox(height: 25),
                 TextField(
-                  controller: phoneController,
-                  decoration: const InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-                    suffixIcon: Icon(
-                      Icons.check,
-                      color: Color(0xFFEEA734),
-                    ),
-                    label: Text(
-                      'PHONE NUMBER',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8), // Adjust the radius as needed
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 25),
-                TextField(
                   controller: passwordController,
                   decoration: const InputDecoration(
                     contentPadding:
@@ -332,13 +324,11 @@ class _SignUpState extends State<SignUpScreen> {
                   onpressed: () {
                     if (nameController.text != "" &&
                         emailController.text != "" &&
-                        passwordController.text != "" &&
-                        phoneController.text != " ") {
+                        passwordController.text != "") {
                       setState(() {
                         email = emailController.text;
                         name = nameController.text;
                         password = passwordController.text;
-                        phone = phoneController.text;
                       });
                     }
                     createAccount();
