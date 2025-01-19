@@ -69,8 +69,14 @@ class _SigninState extends State<SigninScreen> {
 
   void login() async {
     try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      // Completely disconnect the previously signed-in Google account
+      await GoogleSignIn()
+          .disconnect()
+          .catchError((_) {}); // Safely handle if no user is signed in
+      await GoogleSignIn().signOut(); // Ensure sign-out is also called
 
+      // Start Google Sign-In process
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
         // User canceled the sign-in
         return;
@@ -79,18 +85,21 @@ class _SigninState extends State<SigninScreen> {
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
+      // Create Firebase credential
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
+      // Sign in to Firebase
       UserCredential result =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
+      // After successful Firebase sign-in
       if (result.user != null) {
-        // Check if the user exists in Firestore
         String userId = result.user!.uid;
 
+        // Check if the user exists in Firestore
         DocumentSnapshot userDoc = await FirebaseFirestore.instance
             .collection(
                 "User") // Replace "User" with your Firestore collection name
@@ -98,7 +107,7 @@ class _SigninState extends State<SigninScreen> {
             .get();
 
         if (userDoc.exists) {
-          // User exists in Firestore
+          // User exists in Firestore, navigate to Home Screen
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
