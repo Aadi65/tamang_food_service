@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tamang_food_service/screens/signin_screen.dart';
 //import 'package:google_fonts/google_fonts.dart';
@@ -23,6 +24,21 @@ class _HomePageState extends State<HomePageScreen> {
       ),
     );
   }
+
+  // getCurrentLocation() async {
+  //   LocationPermission permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied ||
+  //       permission == LocationPermission.deniedForever) {
+  //     print("Location Denied");
+  //     LocationPermission ask = await Geolocator.requestPermission();
+  //   } else {
+  //     Position currentposition = await Geolocator.getCurrentPosition(
+  //         // ignore: deprecated_member_use
+  //         desiredAccuracy: LocationAccuracy.best);
+  //     print("Latitude=${currentposition.latitude.toString()}");
+  //     print("Longitude=${currentposition.longitude.toString()}");
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

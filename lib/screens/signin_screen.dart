@@ -35,11 +35,12 @@ class _SigninState extends State<SigninScreen> {
             .signInWithEmailAndPassword(email: email, password: password);
         if (result.user != null) {
           // Navigator.popUntil(context, (route) => route.isFirst);
-          Navigator.push(
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
               builder: (context) => const HomePageScreen(),
             ),
+            (Route<dynamic> route) => false,
           );
         }
       } on FirebaseException catch (e) {

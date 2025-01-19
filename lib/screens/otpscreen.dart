@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 import 'package:tamang_food_service/screens/homepage_screen.dart';
+import 'package:tamang_food_service/screens/locationscreen.dart';
+//import 'package:tamang_food_service/screens/locationscreen.dart';
 import 'package:tamang_food_service/screens/widget/custom_button.dart';
 
 class Otpscreen extends StatefulWidget {
@@ -41,11 +43,12 @@ class _OtpscreenState extends State<Otpscreen> {
         );
 
         // Navigate to home page
-        Navigator.pushReplacement(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
             builder: (context) => const HomePageScreen(),
           ),
+          (Route<dynamic> route) => false,
         );
       }
     } on FirebaseAuthException catch (e) {
