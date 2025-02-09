@@ -80,7 +80,16 @@ flutter:
     - assets/Open Doodles.png
     - assets/google.png
     - assets/applelogo.png
-
+    - assets/1.png
+    - assets/2.png
+    - assets/3.png
+    - assets/4.png
+    - assets/adi.png
+    - assets/Banner.png
+    - assets/aa.png
+    - assets/ab.png
+    - assets/ac.png
+    - assets/ad.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

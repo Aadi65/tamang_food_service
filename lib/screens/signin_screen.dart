@@ -205,7 +205,7 @@ class _SigninState extends State<SigninScreen> {
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(
-                        Radius.circular(8), // Adjust the radius as needed
+                        Radius.circular(30), // Adjust the radius as needed
                       ),
                     ),
                   ),
@@ -230,7 +230,7 @@ class _SigninState extends State<SigninScreen> {
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(
-                        Radius.circular(8), // Adjust the radius as needed
+                        Radius.circular(30), // Adjust the radius as needed
                       ),
                     ),
                   ),
@@ -269,50 +269,18 @@ class _SigninState extends State<SigninScreen> {
                   buttonText: 'SIGN IN ',
                   fontsize: 19,
                 ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Don’t have account?',
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black.withOpacity(0.7),
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    InkWell(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SignUpScreen(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'Create new account',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.orange.withOpacity(0.7),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+
                 const SizedBox(height: 40),
                 Text(
-                  'Or',
+                  'or Login With',
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize: 20,
                     fontWeight: FontWeight.w400,
-                    color: Colors.black.withOpacity(0.7),
+                    color: Colors.black.withOpacity(0.5),
                   ),
                 ),
                 // Image.asset('assets/Social accounts.png'),
-                const SizedBox(height: 40),
+                const SizedBox(height: 30),
                 Row(
                   mainAxisSize:
                       MainAxisSize.max, // Adjust size based on content
@@ -335,6 +303,38 @@ class _SigninState extends State<SigninScreen> {
                         'assets/applelogo.png',
                         width: 50, // Set image width
                         height: 50, // Set image height
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 80),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Don’t have account?',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black.withOpacity(0.7),
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SignUpScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Create new account',
+                        style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w400,
+                            color: Color.fromARGB(255, 246, 174, 30)),
                       ),
                     ),
                   ],

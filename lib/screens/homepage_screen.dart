@@ -1,8 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tamang_food_service/screens/signin_screen.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:tamang_food_service/screens/widget/bottom_bar.dart';
 //import 'package:google_fonts/google_fonts.dart';
 
 class HomePageScreen extends StatefulWidget {
@@ -13,10 +17,12 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePageScreen> {
+  String _locationMessage = "";
+
   void signOut() async {
     await GoogleSignIn().signOut();
     await FirebaseAuth.instance.signOut();
-    Navigator.popUntil(context, (route) => route.isFirst);
+    //Navigator.popUntil(context, (route) => route.isFirst);
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -25,20 +31,6 @@ class _HomePageState extends State<HomePageScreen> {
     );
   }
 
-  // getCurrentLocation() async {
-  //   LocationPermission permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.denied ||
-  //       permission == LocationPermission.deniedForever) {
-  //     print("Location Denied");
-  //     LocationPermission ask = await Geolocator.requestPermission();
-  //   } else {
-  //     Position currentposition = await Geolocator.getCurrentPosition(
-  //         // ignore: deprecated_member_use
-  //         desiredAccuracy: LocationAccuracy.best);
-  //     print("Latitude=${currentposition.latitude.toString()}");
-  //     print("Longitude=${currentposition.longitude.toString()}");
-  //   }
-  // }
   void afterLogin() {
     // After the user logs in, check for location permissions
     _checkAndRequestLocationPermission();
@@ -82,7 +74,24 @@ class _HomePageState extends State<HomePageScreen> {
 
     if (permission == LocationPermission.whileInUse ||
         permission == LocationPermission.always) {
-      Position position = await Geolocator.getCurrentPosition();
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy:
+              LocationAccuracy.high); // ignore: deprecated_member_use
+      // Get address from coordinates
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
+
+      if (placemarks.isNotEmpty) {
+        Placemark place = placemarks[0];
+        setState(() {
+          _locationMessage =
+              "${place.name}, ${place.locality}, ${place.country}"; // Address
+        });
+      } else {
+        setState(() {
+          _locationMessage = "Address not found.";
+        });
+      }
       print('User location: ${position.latitude}, ${position.longitude}');
     }
   }
@@ -91,21 +100,22 @@ class _HomePageState extends State<HomePageScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Enable Location Services'),
-        content: Text('Please enable location services to use this feature.'),
+        title: const Text('Enable Location Services'),
+        content:
+            const Text('Please enable location services to use this feature.'),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
               Geolocator.openLocationSettings();
               Navigator.pop(context);
             },
-            child: Text('Settings'),
+            child: const Text('Settings'),
           ),
         ],
       ),
@@ -116,15 +126,15 @@ class _HomePageState extends State<HomePageScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Location Permission Denied'),
-        content: Text(
+        title: const Text('Location Permission Denied'),
+        content: const Text(
             'We need location permission to provide location-based services.'),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
         ],
       ),
@@ -135,37 +145,246 @@ class _HomePageState extends State<HomePageScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Location Permission Denied Forever'),
-        content:
-            Text('Please enable location permission from the app settings.'),
+        title: const Text('Location Permission Denied Forever'),
+        content: const Text(
+            'Please enable location permission from the app settings.'),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
               Geolocator.openAppSettings();
               Navigator.pop(context);
             },
-            child: Text('Settings'),
+            child: const Text('Settings'),
           ),
         ],
       ),
     );
   }
 
+  int _selectedIndex = 0; // Track the selected index
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Home"),
-        actions: [
-          IconButton(
-            onPressed: signOut,
-            icon: const Icon(Icons.exit_to_app),
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          // This makes the page scrollable
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  // First container stays fixed
+                  width: double.infinity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "DELIVERY TO",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFFFBC02D),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            _locationMessage,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.arrow_drop_down,
+                                color: Colors.black),
+                            onPressed: () {
+                              // Handle dropdown click here
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                // The rest of the content will be scrollable
+                Container(
+                  height: 185,
+                  width: 380,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    image: const DecorationImage(
+                      image: AssetImage('assets/2.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Text(
+                      'Featured Partners',
+                      style: GoogleFonts.poppins(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(width: 100),
+                    const Text(
+                      "See all",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFFFBC02D),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      // Add your individual containers here, e.g.:
+                      _buildPartnerItem('assets/adi.png'),
+                      const SizedBox(width: 16),
+                      _buildPartnerItem('assets/aa.png'),
+                      const SizedBox(width: 16),
+                      _buildPartnerItem('assets/ab.png'),
+                      const SizedBox(width: 16),
+                      _buildPartnerItem('assets/ac.png'),
+                      const SizedBox(width: 16),
+                      _buildPartnerItem('assets/ad.png'),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  height: 185,
+                  width: 380,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    image: const DecorationImage(
+                      image: AssetImage('assets/Banner.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Text(
+                      'Best Picks Restaurants',
+                      style: GoogleFonts.poppins(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(width: 50),
+                    const Text(
+                      "See all",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFFFBC02D),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        bottomNavigationBar: HomebottomBar(
+          selectedIndex: _selectedIndex, // You need to define _selectedIndex
+          onTap: (index) {
+            setState(() {
+              _selectedIndex = index; // Update the selected index
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+// Helper method to build partner item
+  Widget _buildPartnerItem(String imagePath) {
+    return Container(
+      width: 200,
+      child: Column(
+        children: [
+          InkWell(
+            onTap: () {},
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.white,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.asset(
+                  imagePath,
+                  width: 200,
+                  height: 160,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Padding(
+            padding: EdgeInsets.only(bottom: 8),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Krispy Creme",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    "St Georgece Terrace, Perth",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "4.5",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

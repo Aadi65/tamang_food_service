@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tamang_food_service/database.dart';
-import 'package:tamang_food_service/screens/homepage_screen.dart';
 import 'package:tamang_food_service/screens/phoneNumberScreen.dart';
 import 'package:tamang_food_service/screens/signin_screen.dart';
-import 'package:tamang_food_service/screens/widget/custom_button.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -19,7 +17,7 @@ class _SignUpState extends State<SignUpScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
+  bool isChecked = false;
   String email = "";
   String name = "";
   String password = "";
@@ -171,19 +169,14 @@ class _SignUpState extends State<SignUpScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const SizedBox(width: 140),
-                      Text(
-                        'Sign Up',
-                        style: GoogleFonts.poppins(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
+                  const SizedBox(width: 140),
+                  Text(
+                    'Sign Up',
+                    style: GoogleFonts.poppins(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
                   const SizedBox(height: 20),
                   Text(
@@ -223,12 +216,12 @@ class _SignUpState extends State<SignUpScreen> {
                                       ),
                                     );
                                   },
-                                  child: Text(
+                                  child: const Text(
                                     'Already have an account?',
                                     style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w400,
-                                      color: Colors.orange.withOpacity(0.7),
+                                      color: Color.fromARGB(255, 246, 174, 30),
                                     ),
                                   ),
                                 ),
@@ -259,7 +252,7 @@ class _SignUpState extends State<SignUpScreen> {
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
-                          Radius.circular(8), // Adjust the radius as needed
+                          Radius.circular(30), // Adjust the radius as needed
                         ),
                       ),
                     ),
@@ -284,7 +277,7 @@ class _SignUpState extends State<SignUpScreen> {
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
-                          Radius.circular(8), // Adjust the radius as needed
+                          Radius.circular(30), // Adjust the radius as needed
                         ),
                       ),
                     ),
@@ -309,38 +302,74 @@ class _SignUpState extends State<SignUpScreen> {
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
-                          Radius.circular(8), // Adjust the radius as needed
+                          Radius.circular(30), // Adjust the radius as needed
                         ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 25),
-                  custom_button(
-                    onpressed: () {
-                      if (nameController.text != "" &&
-                          emailController.text != "" &&
-                          passwordController.text != "") {
-                        setState(() {
-                          email = emailController.text;
-                          name = nameController.text;
-                          password = passwordController.text;
-                        });
-                      }
-                      createAccount();
-                    },
-                    buttonText: 'SIGN UP ',
-                    fontsize: 19,
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: isChecked,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            isChecked = value!;
+                          });
+                        },
+                      ),
+                      Expanded(
+                        child: Text(
+                            'By Signing up you agree to our Terms Conditions & Privacy Policy.',
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black.withOpacity(0.7),
+                            ),
+                            overflow: TextOverflow.clip),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'By Signing up you agree to our Terms Conditions & Privacy Policy.',
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.black.withOpacity(0.7),
+                  const SizedBox(height: 25),
+                  Material(
+                    color: const Color(0xFFFBC02D),
+                    borderRadius: BorderRadius.circular(40),
+                    child: InkWell(
+                      onTap: isChecked
+                          ? () {
+                              if (nameController.text != "" &&
+                                  emailController.text != "" &&
+                                  passwordController.text != "") {
+                                setState(() {
+                                  email = emailController.text;
+                                  name = nameController.text;
+                                  password = passwordController.text;
+                                });
+
+                                createAccount();
+                              }
+                            }
+                          : null,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 115, vertical: 20),
+                        child: const Center(
+                          child: Text(
+                            'SIGN UP',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 19,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 30),
                   Center(
                     child: Text(
                       'Or',

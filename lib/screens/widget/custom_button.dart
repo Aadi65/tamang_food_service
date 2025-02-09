@@ -7,6 +7,7 @@ class custom_button extends StatelessWidget {
     required this.buttonText,
     required this.fontsize,
     super.key,
+    Null Function()? onPressed,
   });
   VoidCallback onpressed;
   String buttonText;
@@ -15,8 +16,8 @@ class custom_button extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       child: Material(
-        color: const Color(0xFFEEA734),
-        borderRadius: BorderRadius.circular(10),
+        color: Color(0xFFFBC02D),
+        borderRadius: BorderRadius.circular(40),
         child: InkWell(
           onTap: onpressed,
           child: Container(
