@@ -1,8 +1,10 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tamang_food_service/screens/signin_screen.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -168,6 +170,13 @@ class _HomePageState extends State<HomePageScreen> {
   }
 
   int _selectedIndex = 0; // Track the selected index
+  final List<String> imagePaths = [
+    'assets/1.png',
+    'assets/2.png',
+    'assets/3.png',
+    'assets/4.png',
+  ];
+  int activeIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +189,7 @@ class _HomePageState extends State<HomePageScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
+                SizedBox(
                   // First container stays fixed
                   width: double.infinity,
                   child: Column(
@@ -219,17 +228,48 @@ class _HomePageState extends State<HomePageScreen> {
                 const SizedBox(height: 20),
 
                 // The rest of the content will be scrollable
-                Container(
-                  height: 185,
-                  width: 380,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: const DecorationImage(
-                      image: AssetImage('assets/2.png'),
-                      fit: BoxFit.cover,
+                CarouselSlider(
+                  options: CarouselOptions(
+                    height: 200,
+                    autoPlay: true,
+                    enlargeCenterPage: true,
+                    viewportFraction: 1.0, //  Full width
+                    autoPlayInterval: const Duration(seconds: 3),
+                    enableInfiniteScroll: true,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        activeIndex = index; //  Update the dot indicator
+                      });
+                    },
+                  ),
+                  items: imagePaths.map((imagePath) {
+                    return Container(
+                      width: double.infinity, //  Ensure full width
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                          image: AssetImage(imagePath),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+
+                const SizedBox(height: 15), // Spacing between slider and dots
+                Center(
+                  child: AnimatedSmoothIndicator(
+                    activeIndex: activeIndex,
+                    count: imagePaths.length,
+                    effect: const ExpandingDotsEffect(
+                      dotHeight: 8,
+                      dotWidth: 8,
+                      activeDotColor: Colors.black, //  Change color if needed
+                      dotColor: Colors.grey,
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 20),
                 Row(
                   children: [
@@ -257,8 +297,6 @@ class _HomePageState extends State<HomePageScreen> {
                   child: Row(
                     children: [
                       // Add your individual containers here, e.g.:
-                      _buildPartnerItem('assets/adi.png'),
-                      const SizedBox(width: 16),
                       _buildPartnerItem('assets/aa.png'),
                       const SizedBox(width: 16),
                       _buildPartnerItem('assets/ab.png'),
