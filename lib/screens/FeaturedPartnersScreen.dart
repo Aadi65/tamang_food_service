@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tamang_food_service/screens/RestaurantMenu.dart';
 import 'package:tamang_food_service/screens/homepage_screen.dart';
 
 class FeaturedPartnersScreen extends StatefulWidget {
@@ -12,50 +13,72 @@ class FeaturedPartnersScreen extends StatefulWidget {
 class _FeaturedPartnersScreenState extends State<FeaturedPartnersScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () {
-            if (Navigator.canPop(context)) {
-              Navigator.pop(context); // Goes back if possible
-            } else {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const HomePageScreen()),
+    return WillPopScope(
+      onWillPop: () async {
+        // Navigate to HomePageScreen instead of closing the app
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePageScreen()),
+        );
+        return false; // Prevent default back behavior (app closing)
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+            onPressed: () {
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context); // Goes back if possible
+              } else {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const HomePageScreen()),
+                );
+              }
+            },
+          ),
+          title: Text(
+            "Featured Partners",
+            style: GoogleFonts.poppins(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          centerTitle: false,
+        ),
+        body: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.all(8.0),
+          child: GridView.builder(
+            itemCount: partners.length,
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 250,
+              childAspectRatio: 0.75,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          RestaurantMenu(partner: partners[index]),
+                    ),
+                  );
+                },
+                child: PartnerCard(
+                  image: partners[index]['image']!,
+                  title: partners[index]['title']!,
+                  cuisine: partners[index]['cuisine']!,
+                ),
               );
-            }
-          },
-        ),
-        title: Text(
-          "Featured Partners",
-          style: GoogleFonts.poppins(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
+            },
           ),
-        ),
-        centerTitle: false,
-      ),
-      body: Container(
-        color: Colors.white, // Set background color to white
-        padding: const EdgeInsets.all(8.0),
-        child: GridView.builder(
-          itemCount: partners.length,
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 250, // Adjusts grid item width dynamically
-            childAspectRatio: 0.75, // Adjusts height relative to width
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-          ),
-          itemBuilder: (context, index) {
-            return PartnerCard(
-              image: partners[index]['image']!,
-              title: partners[index]['title']!,
-              cuisine: partners[index]['cuisine']!,
-            );
-          },
         ),
       ),
     );
@@ -191,17 +214,42 @@ final List<Map<String, String>> partners = [
   {
     "image": "assets/Tacos.png",
     "title": "Tacos Nanchas",
-    "cuisine": "Chinese - American"
+    "cuisine": "Chinese  American"
   },
   {
     "image": "assets/Macd.png",
     "title": "McDonald's",
-    "cuisine": "Chinese - American"
+    "cuisine": "Chinese  American"
   },
   {
     "image": "assets/kfc.png",
     "title": "KFC Foods",
-    "cuisine": "Chinese - American"
+    "cuisine": "Chinese  American"
+  },
+  {
+    "image": "assets/CoffeeShop.png",
+    "title": "Coffee Shop",
+    "cuisine": "Chinese  American"
+  },
+  {
+    "image": "assets/Cafe.png",
+    "title": "TMX Cafe",
+    "cuisine": "Chinese  American"
+  },
+  {
+    "image": "assets/Tacos.png",
+    "title": "Tacos Nanchas",
+    "cuisine": "Chinese  American"
+  },
+  {
+    "image": "assets/Macd.png",
+    "title": "McDonald's",
+    "cuisine": "Chinese  American"
+  },
+  {
+    "image": "assets/kfc.png",
+    "title": "KFC Foods",
+    "cuisine": "Chinese  American"
   },
   {
     "image": "assets/CoffeeShop.png",
@@ -211,41 +259,16 @@ final List<Map<String, String>> partners = [
   {
     "image": "assets/Cafe.png",
     "title": "TMX Cafe",
-    "cuisine": "Chinese - American"
-  },
-  {
-    "image": "assets/Tacos.png",
-    "title": "Tacos Nanchas",
-    "cuisine": "Chinese - American"
+    "cuisine": "Chinese  American"
   },
   {
     "image": "assets/Macd.png",
     "title": "McDonald's",
-    "cuisine": "Chinese - American"
-  },
-  {
-    "image": "assets/kfc.png",
-    "title": "KFC Foods",
-    "cuisine": "Chinese - American"
-  },
-  {
-    "image": "assets/CoffeeShop.png",
-    "title": "Coffee Shop",
-    "cuisine": "Chinese - American"
-  },
-  {
-    "image": "assets/Cafe.png",
-    "title": "TMX Cafe",
-    "cuisine": "Chinese - American"
-  },
-  {
-    "image": "assets/Macd.png",
-    "title": "McDonald's",
-    "cuisine": "Chinese - American"
+    "cuisine": "Chinese  American"
   },
   {
     "image": "assets/Tacos.png",
     "title": "Tacos Nanchas",
-    "cuisine": "Chinese - American"
+    "cuisine": "Chinese  American"
   },
 ];

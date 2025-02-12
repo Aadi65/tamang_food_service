@@ -99,6 +99,16 @@ flutter:
     - assets/Tacos.png
     - assets/22.png
     - assets/23.png
+    - assets/bg2.png
+    - assets/bg3.png
+    - assets/food1.png
+    - assets/food2.png
+    - assets/food3.png
+    - assets/food4.png
+    - assets/food5.png
+    - assets/food6.png
+  
+   
 
     
   # An image asset can refer to one or more resolution-specific "variants", see

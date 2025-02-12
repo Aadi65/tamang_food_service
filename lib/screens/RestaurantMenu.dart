@@ -1,281 +1,286 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:tamang_food_service/screens/widget/fooditem.dart';
 
-class RestaurantMenu extends StatelessWidget {
+class RestaurantMenu extends StatefulWidget {
+  final Map<String, String> partner;
+
+  const RestaurantMenu({super.key, required this.partner});
+
+  @override
+  State<RestaurantMenu> createState() => _RestaurantMenuState();
+}
+
+class _RestaurantMenuState extends State<RestaurantMenu>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState(); // ✅ First call super
+    _tabController = TabController(length: 4, vsync: this, initialIndex: 0);
+    _tabController.addListener(_handleTabSelection);
+  }
+
+  _handleTabSelection() {
+    if (_tabController.indexIsChanging) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Stack(
-              children: <Widget>[
-                Image.network(
-                  'https://pplx-res.cloudinary.com/image/upload/v1739372711/user_uploads/dxHhTPtkFMkwIGE/Screenshot-2025-02-12-203428.jpg',
-                  height: 250,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-                Positioned(
-                  top: 10,
-                  left: 10,
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-                    onPressed: () {},
-                  ),
-                ),
-                Positioned(
-                  top: 10,
-                  right: 10,
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.share, color: Colors.white),
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.search, color: Colors.white),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const Text(
-                    'Mayfield Bakery & Cafe',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    '\$\$ - Chinese - American - Deshi Food',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: <Widget>[
-                      const Icon(Icons.star, color: Colors.amber, size: 16),
-                      const Text('4.2'),
-                      const Text(' (700+ ratings)',
-                          style: TextStyle(color: Colors.grey)),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: <Widget>[
-                      const Icon(Icons.delivery_dining, color: Colors.orange),
-                      const Text(' Free Delivery '),
-                      const SizedBox(width: 16),
-                      const Icon(Icons.timer, color: Colors.orange),
-                      const Text(' 25 Minutes'),
-                      const Spacer(),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange.shade50,
-                          foregroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text('Take Away'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  const Text(
-                    'Featured Items',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 150,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: <Widget>[
-                        _buildFeaturedItem(
-                            'Cookie Sandwich', '\$5 - Chinese', ''),
-                        _buildFeaturedItem('Chow Fun', '\$5 - Chinese', ''),
-                        _buildFeaturedItem(
-                            'Dim Sum', '\$5 - Chinese', ''), // Placeholder
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: <Widget>[
-                        TextButton(
-                          onPressed: () {},
-                          child: const Text('All'),
-                        ),
-                        TextButton(
-                          onPressed: () {},
-                          child: const Text('& Lamb'),
-                        ),
-                        TextButton(
-                          onPressed: () {},
-                          child: const Text('Seafood'),
-                        ),
-                        TextButton(
-                          onPressed: () {},
-                          child: const Text('Appetizers'),
-                        ),
-                        TextButton(
-                          onPressed: () {},
-                          child: const Text('Drinks'),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Most Populars',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  _buildMenuItem(
-                      'Cookie Sandwich',
-                      'Shortbread, chocolate turtle cookies, and red velvet.',
-                      '\$5 - Chinese',
-                      'AU\$10'),
-                  _buildMenuItem(
-                      'Combo Burger',
-                      'Shortbread, chocolate turtle cookies, and red velvet.',
-                      '\$5 - Chinese',
-                      'AU\$10'),
-                  _buildMenuItem(
-                      'Combo Sandwich',
-                      'Shortbread, chocolate turtle cookies, and red velvet.',
-                      '\$5 - Chinese',
-                      'AU\$10'),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Sea Foods',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  _buildMenuItem(
-                      'Oyster Dish',
-                      'Shortbread, chocolate turtle cookies, and red velvet.',
-                      '\$5 - Chinese',
-                      'AU\$10'),
-                  _buildMenuItem(
-                      'Oyster On Ice',
-                      'Shortbread, chocolate turtle cookies, and red velvet.',
-                      '\$5 - Chinese',
-                      'AU\$10'),
-                  _buildMenuItem(
-                      'Fried Rice on Pot',
-                      'Shortbread, chocolate turtle cookies, and red velvet.',
-                      '\$5 - Chinese',
-                      'AU\$10'),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFeaturedItem(String name, String description, String price) {
-    return Container(
-      width: 120,
-      margin: const EdgeInsets.only(right: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.grey[200],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                'https://via.placeholder.com/100', // Replace with your image URL
-                height: 80,
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        // Ensures content starts after the notch
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Image.asset(
+                widget.partner['image']!,
+                height: 250,
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              name,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Text(
-              description,
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      widget.partner['title']!,
+                      style: GoogleFonts.poppins(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Text(
+                          widget.partner['cuisine']!,
+                          style:
+                              const TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'Deshi Food',
+                          style: TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Featured Items',
+                      style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          _buildFeaturedItem(
+                              'Cookie Sandwich', '\$5', 'assets/bg3.png'),
+                          const SizedBox(width: 16),
+                          _buildFeaturedItem(
+                              'Chow Fun', '\$5', 'assets/bg2.png'),
+                          const SizedBox(width: 16),
+                          _buildFeaturedItem(
+                              'Cookie Sandwich', '\$5', 'assets/bg3.png'),
+                          const SizedBox(width: 16),
+                          _buildFeaturedItem(
+                              'Chow Fun', '\$5', 'assets/bg2.png'),
+                          const SizedBox(width: 16),
+                          _buildFeaturedItem(
+                              'Cookie Sandwich', '\$5', 'assets/bg3.png'),
+                          const SizedBox(width: 16),
+                          _buildFeaturedItem(
+                              'Chow Fun', '\$5', 'assets/bg2.png'),
+                          const SizedBox(width: 16),
+                          _buildFeaturedItem(
+                              'Cookie Sandwich', '\$5', 'assets/bg3.png'),
+                          const SizedBox(width: 16),
+                          _buildFeaturedItem(
+                              'Chow Fun', '\$5', 'assets/bg2.png'),
+                          const SizedBox(width: 16),
+                          _buildFeaturedItem(
+                              'Cookie Sandwich', '\$5', 'assets/bg3.png'),
+                          const SizedBox(width: 16),
+                          _buildFeaturedItem(
+                              'Chow Fun', '\$5', 'assets/bg2.png'),
+                        ],
+                      ),
+                    ),
+                    TabBar(
+                      dividerColor: Colors.transparent,
+                      controller: _tabController,
+                      labelColor: const Color(0xFFFBC02D),
+                      unselectedLabelColor: Colors.black.withOpacity(0.8),
+                      isScrollable: true,
+                      tabAlignment: TabAlignment.start,
+                      indicator: const UnderlineTabIndicator(
+                        borderSide: BorderSide(
+                          width: 3,
+                          color: Color(0xFFFBC02D),
+                        ),
+                        insets: EdgeInsets.symmetric(horizontal: 5),
+                      ),
+                      labelStyle: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.w500),
+                      // labelPadding: const EdgeInsets.symmetric(horizontal: 20),
+                      tabs: const [
+                        Tab(text: "Lamb"),
+                        Tab(text: "Sea Food"),
+                        Tab(text: "Appetizers"),
+                        Tab(text: "Dessert"),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Most Popular',
+                      style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const FoodItem(
+                      title: 'Cookie Sandwich',
+                      description:
+                          'Shortbread, chocolate turtle cookies, and red velvet.',
+                      price: 'AUD\$10',
+                      image: 'assets/food1.png',
+                    ),
+                    const FoodItem(
+                      title: 'Combo Burger',
+                      description:
+                          'Shortbread, chocolate turtle cookies, and red velvet.',
+                      price: 'AUD\$10',
+                      image: 'assets/food2.png',
+                    ),
+                    const FoodItem(
+                      title: 'Combo Sandwich',
+                      description:
+                          'Shortbread, chocolate turtle cookies, and red velvet.',
+                      price: 'AUD\$10',
+                      image: 'assets/food3.png',
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Sea Foods',
+                      style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const FoodItem(
+                      title: 'Oyster Dish',
+                      description:
+                          'Shortbread, chocolate turtle cookies, and red velvet.',
+                      price: 'AUD\$10',
+                      image: 'assets/food4.png',
+                    ),
+                    const FoodItem(
+                      title: 'Oyster On Ice',
+                      description:
+                          'Shortbread, chocolate turtle cookies, and red velvet.',
+                      price: 'AUD\$10',
+                      image: 'assets/food5.png',
+                    ),
+                    const FoodItem(
+                      title: 'Oyster On Ice',
+                      description:
+                          'Shortbread, chocolate turtle cookies, and red velvet.',
+                      price: 'AUD\$10',
+                      image: 'assets/food6.png',
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildMenuItem(
-      String name, String description, String price, String audPrice) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              'https://via.placeholder.com/80', // Replace with your image URL
-              height: 80,
-              width: 80,
-              fit: BoxFit.cover,
+  Widget _buildFeaturedItem(String name, String price, String imagePath) {
+    return SizedBox(
+      width: 150, // Ensure a consistent width
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start, // Align text properly
+        children: [
+          InkWell(
+            onTap: () {},
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.white,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.asset(
+                  imagePath,
+                  width: 200, // Consistent with the container width
+                  height: 150, // Adjust height to maintain aspect ratio
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  name,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-                Text(
-                  description,
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
-                ),
-                Text(
-                  price,
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
-                ),
-              ],
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              name, // Removed `const`
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+              ),
             ),
           ),
-          Text(
-            audPrice,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.grey,
-            ),
+          Row(
+            children: [
+              Text(
+                price, // Removed `const`
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black54,
+                ),
+              ),
+              const SizedBox(width: 30),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Chinese",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),

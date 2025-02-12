@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePageScreen> {
       Position position = await Geolocator.getCurrentPosition(
           // ignore: deprecated_member_use
           desiredAccuracy:
-              LocationAccuracy.high); // ignore: deprecated_member_use
+              LocationAccuracy.best); // ignore: deprecated_member_use
       // Get address from coordinates
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
@@ -183,50 +183,51 @@ class _HomePageState extends State<HomePageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(80),
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: AppBar(
-              backgroundColor: Colors.white,
-              centerTitle: true,
-              title: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 10),
-                  const Text(
-                    "DELIVERY TO",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFFFBC02D),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(80),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: AppBar(
+            backgroundColor: Colors.transparent,
+            centerTitle: true,
+            title: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 10),
+                const Text(
+                  "DELIVERY TO",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Color(0xFFFBC02D),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      _locationMessage,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        _locationMessage,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.arrow_drop_down,
-                            color: Colors.black),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    IconButton(
+                      icon: const Icon(Icons.arrow_drop_down,
+                          color: Colors.black),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
-        body: SingleChildScrollView(
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -241,9 +242,9 @@ class _HomePageState extends State<HomePageScreen> {
                     autoPlayInterval: const Duration(seconds: 3),
                     enableInfiniteScroll: true,
                     onPageChanged: (index, reason) {
-                      //setState(() {
-                      //activeIndex = index;
-                      //});
+                      setState(() {
+                        activeIndex = index;
+                      });
                     },
                   ),
                   items: imagePaths.map((imagePath) {
@@ -316,6 +317,14 @@ class _HomePageState extends State<HomePageScreen> {
                       _buildPartnerItem('assets/ac.png'),
                       const SizedBox(width: 16),
                       _buildPartnerItem('assets/ad.png'),
+                      const SizedBox(width: 16),
+                      _buildPartnerItem('assets/aa.png'),
+                      const SizedBox(width: 16),
+                      _buildPartnerItem('assets/ab.png'),
+                      const SizedBox(width: 16),
+                      _buildPartnerItem('assets/ac.png'),
+                      const SizedBox(width: 16),
+                      _buildPartnerItem('assets/ad.png'),
                     ],
                   ),
                 ),
@@ -352,9 +361,7 @@ class _HomePageState extends State<HomePageScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -425,14 +432,14 @@ class _HomePageState extends State<HomePageScreen> {
             ),
           ),
         ),
-        bottomNavigationBar: HomebottomBar(
-          selectedIndex: _selectedIndex,
-          onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-        ),
+      ),
+      bottomNavigationBar: HomebottomBar(
+        selectedIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
     );
   }
