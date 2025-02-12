@@ -4,9 +4,10 @@ import 'package:geolocator/geolocator.dart';
 class Locationscreen extends StatefulWidget {
   final bool showPermissionDialog;
 
-  Locationscreen({required this.showPermissionDialog});
+  Locationscreen({super.key, required this.showPermissionDialog});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LocationscreenState createState() => _LocationscreenState();
 }
 
@@ -65,21 +66,22 @@ class _LocationscreenState extends State<Locationscreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Enable Location Services'),
-        content: Text('Please enable location services to use this feature.'),
+        title: const Text('Enable Location Services'),
+        content:
+            const Text('Please enable location services to use this feature.'),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
               Geolocator.openLocationSettings();
               Navigator.pop(context);
             },
-            child: Text('Settings'),
+            child: const Text('Settings'),
           ),
         ],
       ),
@@ -90,15 +92,15 @@ class _LocationscreenState extends State<Locationscreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Location Permission Denied'),
-        content: Text(
+        title: const Text('Location Permission Denied'),
+        content: const Text(
             'We need location permission to provide location-based services.'),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
         ],
       ),
@@ -109,22 +111,22 @@ class _LocationscreenState extends State<Locationscreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Location Permission Denied Forever'),
-        content:
-            Text('Please enable location permission from the app settings.'),
+        title: const Text('Location Permission Denied Forever'),
+        content: const Text(
+            'Please enable location permission from the app settings.'),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
               Geolocator.openAppSettings();
               Navigator.pop(context);
             },
-            child: Text('Settings'),
+            child: const Text('Settings'),
           ),
         ],
       ),
@@ -134,8 +136,8 @@ class _LocationscreenState extends State<Locationscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Home Page')),
-      body: Center(
+      appBar: AppBar(title: const Text('Home Page')),
+      body: const Center(
         child: Text('Welcome to the Home Page!'),
       ),
     );

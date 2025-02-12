@@ -16,7 +16,7 @@ class custom_button extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       child: Material(
-        color: Color(0xFFFBC02D),
+        color: const Color(0xFFFBC02D),
         borderRadius: BorderRadius.circular(40),
         child: InkWell(
           onTap: onpressed,

@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:tamang_food_service/screens/Profile_screen.dart';
+import 'package:tamang_food_service/screens/AccountSettingsScreen.dart';
+import 'package:tamang_food_service/screens/MenuScreen.dart';
+import 'package:tamang_food_service/screens/SearchScreen.dart';
+import 'package:tamang_food_service/screens/homepage_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomebottomBar extends StatelessWidget {
+class HomebottomBar extends StatefulWidget {
   final int selectedIndex;
   final ValueChanged<int> onTap;
 
   HomebottomBar({required this.selectedIndex, required this.onTap});
 
+  @override
+  State<HomebottomBar> createState() => _HomebottomBarState();
+}
+
+class _HomebottomBarState extends State<HomebottomBar> {
+  int _selectedIndex = 0;
+
+  // // Track the selected index
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,15 +53,17 @@ class HomebottomBar extends StatelessWidget {
           // ✅ Navigate to Profile Screen
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ProfileScreen()),
+            MaterialPageRoute(builder: (context) => AccountSettingsScreen()),
           );
         } else {
-          onTap(index); // ✅ Change the tab normally
+          widget.onTap(index); // ✅ Change the tab normally
         }
       },
       child: Icon(
         icon,
-        color: selectedIndex == index ? const Color(0xFFFBC02D) : Colors.grey,
+        color: widget.selectedIndex == index
+            ? const Color(0xFFFBC02D)
+            : Colors.grey,
         size: 30,
       ),
     );

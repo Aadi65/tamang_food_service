@@ -38,6 +38,7 @@ dependencies:
   pinput: ^5.0.1
   carousel_slider: ^5.0.0
   smooth_page_indicator: ^1.2.0+3
+  flutter_riverpod: ^2.6.1
   flutter:
     sdk: flutter
 
@@ -91,6 +92,15 @@ flutter:
     - assets/ab.png
     - assets/ac.png
     - assets/ad.png
+    - assets/Cafe.png
+    - assets/CoffeeShop.png
+    - assets/kfc.png
+    - assets/Macd.png
+    - assets/Tacos.png
+    - assets/22.png
+    - assets/23.png
+
+    
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

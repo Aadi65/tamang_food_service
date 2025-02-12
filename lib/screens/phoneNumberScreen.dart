@@ -1,11 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tamang_food_service/screens/otpscreen.dart';
 import 'package:tamang_food_service/screens/widget/custom_button.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-//import 'package:google_fonts/google_fonts.dart';
 
 class Phonenumberscreen extends StatefulWidget {
   const Phonenumberscreen({super.key});

@@ -114,14 +114,12 @@ class _WalkthroughState extends State<WalkthroughScreen> {
                 ),
               ),
             ),
-            Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  contents.length,
-                  (index) => buildDot(index, context),
-                ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                contents.length,
+                (index) => buildDot(index, context),
               ),
             ),
             const SizedBox(height: 20),

@@ -10,6 +10,7 @@ import 'package:tamang_food_service/screens/signin_screen.dart';
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
   @override
+  // ignore: library_private_types_in_public_api
   _SignUpState createState() => _SignUpState();
 }
 

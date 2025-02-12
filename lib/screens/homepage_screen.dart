@@ -5,10 +5,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:tamang_food_service/screens/FeaturedPartnersScreen.dart';
+import 'package:tamang_food_service/screens/MenuScreen.dart';
+import 'package:tamang_food_service/screens/SearchScreen.dart';
 import 'package:tamang_food_service/screens/signin_screen.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:tamang_food_service/screens/widget/bottom_bar.dart';
+import 'package:tamang_food_service/screens/widget/HomeBottomBar.dart';
 //import 'package:google_fonts/google_fonts.dart';
 
 class HomePageScreen extends StatefulWidget {
@@ -34,7 +36,7 @@ class _HomePageState extends State<HomePageScreen> {
   }
 
   void afterLogin() {
-    // After the user logs in, check for location permissions
+    //After the user logs in, check for location permissions
     _checkAndRequestLocationPermission();
   }
 
@@ -77,6 +79,7 @@ class _HomePageState extends State<HomePageScreen> {
     if (permission == LocationPermission.whileInUse ||
         permission == LocationPermission.always) {
       Position position = await Geolocator.getCurrentPosition(
+          // ignore: deprecated_member_use
           desiredAccuracy:
               LocationAccuracy.high); // ignore: deprecated_member_use
       // Get address from coordinates
@@ -94,7 +97,7 @@ class _HomePageState extends State<HomePageScreen> {
           _locationMessage = "Address not found.";
         });
       }
-      print('User location: ${position.latitude}, ${position.longitude}');
+      // print('User location: ${position.latitude}, ${position.longitude}');
     }
   }
 
@@ -182,69 +185,70 @@ class _HomePageState extends State<HomePageScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(80),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: AppBar(
+              backgroundColor: Colors.white,
+              centerTitle: true,
+              title: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 10),
+                  const Text(
+                    "DELIVERY TO",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFFFBC02D),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        _locationMessage,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.arrow_drop_down,
+                            color: Colors.black),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
         body: SingleChildScrollView(
-          // This makes the page scrollable
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  // First container stays fixed
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "DELIVERY TO",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFFFBC02D),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            _locationMessage,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black,
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.arrow_drop_down,
-                                color: Colors.black),
-                            onPressed: () {
-                              // Handle dropdown click here
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                // The rest of the content will be scrollable
                 CarouselSlider(
                   options: CarouselOptions(
                     height: 200,
                     autoPlay: true,
                     enlargeCenterPage: true,
-                    viewportFraction: 1.0, //  Full width
+                    viewportFraction: 1.0,
                     autoPlayInterval: const Duration(seconds: 3),
                     enableInfiniteScroll: true,
                     onPageChanged: (index, reason) {
-                      setState(() {
-                        activeIndex = index; //  Update the dot indicator
-                      });
+                      //setState(() {
+                      //activeIndex = index;
+                      //});
                     },
                   ),
                   items: imagePaths.map((imagePath) {
                     return Container(
-                      width: double.infinity, //  Ensure full width
+                      width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         image: DecorationImage(
@@ -255,8 +259,7 @@ class _HomePageState extends State<HomePageScreen> {
                     );
                   }).toList(),
                 ),
-
-                const SizedBox(height: 15), // Spacing between slider and dots
+                const SizedBox(height: 15),
                 Center(
                   child: AnimatedSmoothIndicator(
                     activeIndex: activeIndex,
@@ -264,12 +267,11 @@ class _HomePageState extends State<HomePageScreen> {
                     effect: const ExpandingDotsEffect(
                       dotHeight: 8,
                       dotWidth: 8,
-                      activeDotColor: Colors.black, //  Change color if needed
+                      activeDotColor: Colors.black,
                       dotColor: Colors.grey,
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 20),
                 Row(
                   children: [
@@ -281,12 +283,23 @@ class _HomePageState extends State<HomePageScreen> {
                         color: Colors.black,
                       ),
                     ),
-                    const SizedBox(width: 100),
-                    const Text(
-                      "See all",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Color(0xFFFBC02D),
+                    const SizedBox(width: 110),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FeaturedPartnersScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'See all',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 246, 174, 30),
+                        ),
                       ),
                     ),
                   ],
@@ -296,7 +309,6 @@ class _HomePageState extends State<HomePageScreen> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      // Add your individual containers here, e.g.:
                       _buildPartnerItem('assets/aa.png'),
                       const SizedBox(width: 16),
                       _buildPartnerItem('assets/ab.png'),
@@ -340,15 +352,84 @@ class _HomePageState extends State<HomePageScreen> {
                     ),
                   ],
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      _buildRestaurantCard('McDonald\'s',
+                          'Hay street, Perth City', 'assets/aa.png'),
+                      const SizedBox(width: 16),
+                      _buildRestaurantCard('The Halal Guys',
+                          'Hay street, Perth', 'assets/ab.png'),
+                      const SizedBox(width: 16),
+                      _buildRestaurantCard('McDonald\'s',
+                          'Hay street, Perth City', 'assets/ac.png'),
+                      const SizedBox(width: 16),
+                      _buildRestaurantCard('The Halal Guys',
+                          'Hay street, Perth', 'assets/ad.png'),
+                      const SizedBox(width: 16),
+                      _buildRestaurantCard('McDonald\'s',
+                          'Hay street, Perth City', 'assets/aa.png'),
+                      const SizedBox(width: 16),
+                      _buildRestaurantCard('The Halal Guys',
+                          'Hay street, Perth', 'assets/ab.png'),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Text(
+                      'All Restaurants',
+                      style: GoogleFonts.poppins(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(width: 135),
+                    const Text(
+                      "See all",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFFFBC02D),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  children: [
+                    _buildRestaurantTile('McDonald\'s',
+                        '\$\$  Chinese  American   Demos', 'assets/22.png'),
+                    _buildRestaurantTile('Cafe Brichor\'s',
+                        '\$\$  Chinese  American   Demos', 'assets/23.png'),
+                    _buildRestaurantTile('McDonald\'s',
+                        '\$\$  Chinese  American   Demos', 'assets/22.png'),
+                    _buildRestaurantTile('Cafe Brichor\'s',
+                        '\$\$  Chinese  American   Demos', 'assets/23.png'),
+                    _buildRestaurantTile('McDonald\'s',
+                        '\$\$  Chinese  American   Demos', 'assets/22.png'),
+                    _buildRestaurantTile('Cafe Brichor\'s',
+                        '\$\$  Chinese  American   Demos', 'assets/23.png'),
+                    _buildRestaurantTile('McDonald\'s',
+                        '\$\$  Chinese  American   Demos', 'assets/22.png'),
+                    _buildRestaurantTile('Cafe Brichor\'s',
+                        '\$\$  Chinese  American   Demos', 'assets/23.png'),
+                  ],
+                ),
               ],
             ),
           ),
         ),
         bottomNavigationBar: HomebottomBar(
-          selectedIndex: _selectedIndex, // You need to define _selectedIndex
+          selectedIndex: _selectedIndex,
           onTap: (index) {
             setState(() {
-              _selectedIndex = index; // Update the selected index
+              _selectedIndex = index;
             });
           },
         ),
@@ -358,12 +439,20 @@ class _HomePageState extends State<HomePageScreen> {
 
 // Helper method to build partner item
   Widget _buildPartnerItem(String imagePath) {
-    return Container(
+    return SizedBox(
       width: 200,
       child: Column(
         children: [
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Future.delayed(Duration.zero, () {
+                if (mounted) {
+                  setState(() {
+                    // Some state change here
+                  });
+                }
+              });
+            },
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
@@ -416,7 +505,7 @@ class _HomePageState extends State<HomePageScreen> {
                 Text(
                   "4.5",
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),
@@ -428,4 +517,132 @@ class _HomePageState extends State<HomePageScreen> {
       ),
     );
   }
+}
+
+Widget _buildRestaurantCard(String title, String subtitle, String imagePath) {
+  return SizedBox(
+    width: 200, // Ensure a consistent width
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start, // Align text properly
+      children: [
+        InkWell(
+          onTap: () {},
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.white,
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.asset(
+                imagePath,
+                width: 200, // Consistent with the container width
+                height: 160, // Adjust height to maintain aspect ratio
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Text(
+            title, // Removed `const`
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          subtitle, // Removed `const`
+          style: const TextStyle(
+            fontSize: 16,
+            color: Colors.black54,
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "4.5",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildRestaurantTile(String title, String subtitle, String imagePath) {
+  return SizedBox(
+    width: double.infinity, // Take full width
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start, // Align text properly
+      children: [
+        InkWell(
+          onTap: () {},
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.white,
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.asset(
+                imagePath,
+                width: double.infinity, // Full width
+                height: 200, // Adjust height to maintain aspect ratio
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          subtitle,
+          style: const TextStyle(
+            fontSize: 16,
+            color: Colors.black54,
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "4.5",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
 }
