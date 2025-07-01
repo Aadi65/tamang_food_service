@@ -15,7 +15,6 @@
 - 🍕 Browse Restaurants, Menus & Food Categories  
 - 📦 Easy Order Placement & Checkout  
 - 📱 Intuitive & Modern Flutter UI  
-- 💬 Responsive Design for Android & iOS  
 
 ---
 
