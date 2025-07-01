@@ -14,49 +14,59 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});
   @override
-  // ignore: library_private_types_in_public_api
   _SigninState createState() => _SigninState();
 }
 
 class _SigninState extends State<SigninScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
   String password = "";
   String email = "";
+
+  bool _obscurePassword = true;
+  bool _isEmailValid = false;
+
+  bool _validateEmail(String email) {
+    return RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$").hasMatch(email);
+  }
+
   void signin() async {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
+
     if (email == "" || password == "") {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text(" Please fill all the details"),
+          content: Text("Please fill all the details"),
+          backgroundColor: Colors.redAccent,
         ),
       );
     } else {
       try {
         UserCredential result = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
+
         if (result.user != null) {
-          // Navigator.popUntil(context, (route) => route.isFirst);
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(
-              builder: (context) => const HomePageScreen(),
-            ),
+            MaterialPageRoute(builder: (context) => MainLayoutWithGNav()),
             (Route<dynamic> route) => false,
           );
         }
-      } on FirebaseException catch (e) {
-        if (e.code == 'user-not-found') {
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found' || e.code == 'wrong-password') {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text("No User Found for that Email"),
+              content: Text("Incorrect email or password."),
+              backgroundColor: Colors.redAccent,
             ),
           );
-        } else if (e.code == 'wrong-password') {
+        } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Wrong Password"),
+            SnackBar(
+              content: Text("Authentication failed: ${e.message}"),
+              backgroundColor: Colors.redAccent,
             ),
           );
         }
@@ -64,6 +74,7 @@ class _SigninState extends State<SigninScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("An unexpected error occurred: $e"),
+            backgroundColor: Colors.redAccent,
           ),
         );
       }
@@ -72,45 +83,32 @@ class _SigninState extends State<SigninScreen> {
 
   void login() async {
     try {
-      // Completely disconnect the previously signed-in Google account
-      await GoogleSignIn()
-          .disconnect()
-          .catchError((_) {}); // Safely handle if no user is signed in
-      await GoogleSignIn().signOut(); // Ensure sign-out is also called
+      await GoogleSignIn().disconnect().catchError((_) {});
+      await GoogleSignIn().signOut();
 
-      // Start Google Sign-In process
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) {
-        // User canceled the sign-in
-        return;
-      }
+      if (googleUser == null) return;
 
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
-      // Create Firebase credential
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      // Sign in to Firebase
       UserCredential result =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
-      // After successful Firebase sign-in
       if (result.user != null) {
         String userId = result.user!.uid;
 
-        // Check if the user exists in Firestore
         DocumentSnapshot userDoc = await FirebaseFirestore.instance
-            .collection(
-                "User") // Replace "User" with your Firestore collection name
+            .collection("User")
             .doc(userId)
             .get();
 
         if (userDoc.exists) {
-          // User exists in Firestore, navigate to Home Screen
           Provider.of<BottomNavProvider>(context, listen: false)
               .resetInitialization();
           Navigator.pushAndRemoveUntil(
@@ -120,16 +118,14 @@ class _SigninState extends State<SigninScreen> {
             (route) => false,
           );
         } else {
-          // User doesn't exist in Firestore, sign them out
           await FirebaseAuth.instance.signOut();
           await GoogleSignIn().signOut();
-
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("No account found. Please sign up first."),
+              backgroundColor: Colors.grey,
             ),
           );
-
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const SigninScreen()),
@@ -138,10 +134,10 @@ class _SigninState extends State<SigninScreen> {
         }
       }
     } catch (e) {
-      // Handle errors (e.g., network issues, authentication failure)
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Error during login: $e"),
+          backgroundColor: Colors.grey,
         ),
       );
     }
@@ -190,16 +186,25 @@ class _SigninState extends State<SigninScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
+
+                /// EMAIL FIELD
                 TextField(
                   controller: emailController,
-                  decoration: const InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                  onChanged: (value) {
+                    setState(() {
+                      _isEmailValid = _validateEmail(value);
+                    });
+                  },
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 15),
                     suffixIcon: Icon(
                       Icons.check,
-                      color: Color(0xFFEEA734),
+                      color: _isEmailValid
+                          ? Colors.green
+                          : const Color(0xFFEEA734),
                     ),
-                    label: Text(
+                    label: const Text(
                       'EMAIL ADDRESS',
                       style: TextStyle(
                         fontSize: 15,
@@ -207,24 +212,35 @@ class _SigninState extends State<SigninScreen> {
                         color: Colors.black,
                       ),
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30), // Adjust the radius as needed
-                      ),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(30)),
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 25),
+
+                /// PASSWORD FIELD
                 TextField(
                   controller: passwordController,
-                  decoration: const InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-                    suffixIcon: Icon(
-                      Icons.visibility_off,
-                      color: Color(0xFFEEA734),
+                  obscureText: _obscurePassword,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 15),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: const Color(0xFFEEA734),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
                     ),
-                    label: Text(
+                    label: const Text(
                       'PASSWORD',
                       style: TextStyle(
                         fontSize: 15,
@@ -232,14 +248,14 @@ class _SigninState extends State<SigninScreen> {
                         color: Colors.black,
                       ),
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30), // Adjust the radius as needed
-                      ),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(30)),
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 20),
+
                 InkWell(
                   onTap: () {
                     Navigator.push(
@@ -258,7 +274,9 @@ class _SigninState extends State<SigninScreen> {
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 25),
+
                 custom_button(
                   onpressed: () {
                     if (emailController.text != "" &&
@@ -283,11 +301,8 @@ class _SigninState extends State<SigninScreen> {
                     color: Colors.black.withOpacity(0.5),
                   ),
                 ),
-                // Image.asset('assets/Social accounts.png'),
                 const SizedBox(height: 30),
                 Row(
-                  mainAxisSize:
-                      MainAxisSize.max, // Adjust size based on content
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     InkWell(
@@ -296,8 +311,8 @@ class _SigninState extends State<SigninScreen> {
                       },
                       child: Image.asset(
                         'assets/google.png',
-                        width: 48, // Set image width
-                        height: 48, // Set image height
+                        width: 48,
+                        height: 48,
                       ),
                     ),
                     const SizedBox(width: 20),
@@ -305,8 +320,8 @@ class _SigninState extends State<SigninScreen> {
                       onTap: () {},
                       child: Image.asset(
                         'assets/applelogo.png',
-                        width: 50, // Set image width
-                        height: 50, // Set image height
+                        width: 50,
+                        height: 50,
                       ),
                     ),
                   ],
@@ -336,9 +351,10 @@ class _SigninState extends State<SigninScreen> {
                       child: const Text(
                         'Create new account',
                         style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w400,
-                            color: Color.fromARGB(255, 246, 174, 30)),
+                          fontSize: 17,
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 246, 174, 30),
+                        ),
                       ),
                     ),
                   ],
