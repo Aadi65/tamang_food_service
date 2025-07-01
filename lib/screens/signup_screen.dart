@@ -24,11 +24,13 @@ class _SignUpState extends State<SignUpScreen> {
   bool _isEmailValid = false;
   String? _emailError;
 
+  // Email format validation
   bool _validateEmail(String email) {
     final pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
     return RegExp(pattern).hasMatch(email);
   }
 
+  // Email + Password Sign Up
   void createAccount() async {
     String name = nameController.text.trim();
     String email = emailController.text.trim();
@@ -51,6 +53,7 @@ class _SignUpState extends State<SignUpScreen> {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
+
       if (userCredential.user != null) {
         Navigator.push(
           context,
@@ -70,7 +73,7 @@ class _SignUpState extends State<SignUpScreen> {
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Error creating account")),
+          SnackBar(content: Text("Firebase Error: ${e.message}")),
         );
       }
     } catch (e) {
@@ -80,11 +83,11 @@ class _SignUpState extends State<SignUpScreen> {
     }
   }
 
+  // Google Sign-In
   void login() async {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn();
-      await googleSignIn.signOut();
-
+      await googleSignIn.signOut(); // force fresh login
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       if (googleUser == null) return;
 
@@ -109,10 +112,13 @@ class _SignUpState extends State<SignUpScreen> {
             .get();
 
         if (userDoc.exists) {
+          // 🔴 Already registered
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("This account is already registered")),
           );
+          return;
         } else {
+          // 🟢 New user
           Map<String, dynamic> userInfoMap = {
             "email": userdetails.email,
             "name": userdetails.displayName,
@@ -123,17 +129,20 @@ class _SignUpState extends State<SignUpScreen> {
 
           await DatabaseMethods()
               .addUser(userdetails.uid, userInfoMap)
-              .then((value) {});
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const Phonenumberscreen(),
-            ),
-          );
+              .then((value) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Phonenumberscreen(),
+              ),
+            );
+          });
         }
       }
     } catch (e) {
-      print("Error during login: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Google Sign-In Error: $e")),
+      );
     }
   }
 
@@ -216,11 +225,7 @@ class _SignUpState extends State<SignUpScreen> {
                     suffixIcon: Icon(Icons.person, color: Color(0xFFEEA734)),
                     label: Text(
                       'FULL NAME',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black,
-                      ),
+                      style: TextStyle(fontSize: 15, color: Colors.black),
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -251,11 +256,7 @@ class _SignUpState extends State<SignUpScreen> {
                     ),
                     label: const Text(
                       'EMAIL ADDRESS',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black,
-                      ),
+                      style: TextStyle(fontSize: 15, color: Colors.black),
                     ),
                     errorText: _emailError,
                     border: const OutlineInputBorder(
@@ -287,11 +288,7 @@ class _SignUpState extends State<SignUpScreen> {
                     ),
                     label: const Text(
                       'PASSWORD',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black,
-                      ),
+                      style: TextStyle(fontSize: 15, color: Colors.black),
                     ),
                     border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -316,7 +313,6 @@ class _SignUpState extends State<SignUpScreen> {
                         'By Signing up you agree to our Terms Conditions & Privacy Policy.',
                         style: TextStyle(
                           fontSize: 17,
-                          fontWeight: FontWeight.w400,
                           color: Colors.black.withOpacity(0.7),
                         ),
                       ),
@@ -354,7 +350,6 @@ class _SignUpState extends State<SignUpScreen> {
                   'Or',
                   style: TextStyle(
                     fontSize: 25,
-                    fontWeight: FontWeight.w400,
                     color: Colors.black.withOpacity(0.7),
                   ),
                 ),
@@ -373,7 +368,9 @@ class _SignUpState extends State<SignUpScreen> {
                     ),
                     const SizedBox(width: 20),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        // implement Apple login if needed
+                      },
                       child: Image.asset(
                         'assets/applelogo.png',
                         width: 50,

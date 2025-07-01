@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 import 'package:tamang_food_service/screens/MainLayoutWithGNav.dart';
-import 'package:tamang_food_service/screens/homepage_screen.dart';
 import 'package:tamang_food_service/screens/widget/custom_button.dart';
 
 class Otpscreen extends StatefulWidget {
@@ -41,13 +40,10 @@ class _OtpscreenState extends State<Otpscreen> {
           const SnackBar(content: Text("OTP verified successfully!")),
         );
 
-        // Navigate to home page
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => MainLayoutWithGNav(
-              initialIndex: 0,
-            ),
+            builder: (context) => MainLayoutWithGNav(initialIndex: 0),
           ),
           (Route<dynamic> route) => false,
         );
@@ -67,83 +63,87 @@ class _OtpscreenState extends State<Otpscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white, // ✅ Ensure background is set
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Icon(
-                      Icons.arrow_back_ios_new,
-                      color: Colors.black,
+        child: SingleChildScrollView(
+          // ✅ Scrollable in case of keyboard
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(
+                        Icons.arrow_back_ios_new,
+                        color: Colors.black,
+                      ),
                     ),
+                    const SizedBox(width: 105),
+                    Text(
+                      'Verify OTP',
+                      style: GoogleFonts.poppins(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 40),
+                Text(
+                  'Enter OTP',
+                  style: GoogleFonts.poppins(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.black,
                   ),
-                  const SizedBox(width: 105),
-                  Text(
-                    'Verify OTP',
-                    style: GoogleFonts.poppins(
-                      fontSize: 25,
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Enter the 6-digit code sent to ${widget.phoneNumber}',
+                  style: GoogleFonts.poppins(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.black.withOpacity(0.5),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                Pinput(
+                  length: 6,
+                  onChanged: (value) {
+                    setState(() {
+                      code = value;
+                    });
+                  },
+                  defaultPinTheme: PinTheme(
+                    width: 50,
+                    height: 50,
+                    textStyle: GoogleFonts.poppins(
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 40),
-              Text(
-                'Enter OTP',
-                style: GoogleFonts.poppins(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                'Enter the 6-digit code sent to ${widget.phoneNumber}',
-                style: GoogleFonts.poppins(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.black.withOpacity(0.5),
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              Pinput(
-                length: 6,
-                onChanged: (value) {
-                  setState(() {
-                    code = value;
-                  });
-                },
-                defaultPinTheme: PinTheme(
-                  width: 50,
-                  height: 50,
-                  textStyle: GoogleFonts.poppins(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 24),
-              custom_button(
-                onpressed: signIn,
-                buttonText: 'VERIFY OTP',
-                fontsize: 19,
-              ),
-            ],
+                const SizedBox(height: 24),
+                custom_button(
+                  onpressed: signIn,
+                  buttonText: 'VERIFY OTP',
+                  fontsize: 19,
+                ),
+              ],
+            ),
           ),
         ),
       ),
