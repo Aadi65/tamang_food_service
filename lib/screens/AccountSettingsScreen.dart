@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tamang_food_service/screens/signin_screen.dart';
-import 'package:tamang_food_service/screens/widget/HomeBottomBar.dart';
 
 class AccountSettingsScreen extends StatefulWidget {
   const AccountSettingsScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _AccountSettingsScreenState createState() => _AccountSettingsScreenState();
 }
 
@@ -23,7 +21,6 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
       await GoogleSignIn().signOut();
       await FirebaseAuth.instance.signOut();
 
-      // Navigate to SigninScreen after logout
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -36,6 +33,31 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
         const SnackBar(content: Text("Error signing out. Please try again.")),
       );
     }
+  }
+
+  void showLogoutConfirmation() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Logout Confirmation"),
+          content: const Text("Are you sure you want to logout?"),
+          actions: [
+            TextButton(
+              child: const Text("Cancel"),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: const Text("Logout"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                signOut(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -104,26 +126,27 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
               ),
               const SizedBox(height: 10),
               NotificationItem(
-                  icon: Icons.notifications_outlined,
-                  title: 'Push Notifications',
-                  subtitle: 'For daily updates',
-                  value: pushNotifications,
-                  onChanged: (value) =>
-                      setState(() => pushNotifications = value)),
+                icon: Icons.notifications_outlined,
+                title: 'Push Notifications',
+                subtitle: 'For daily updates',
+                value: pushNotifications,
+                onChanged: (value) => setState(() => pushNotifications = value),
+              ),
               NotificationItem(
-                  icon: Icons.message_outlined,
-                  title: 'SMS Notifications',
-                  subtitle: 'For daily updates',
-                  value: smsNotifications,
-                  onChanged: (value) =>
-                      setState(() => smsNotifications = value)),
+                icon: Icons.message_outlined,
+                title: 'SMS Notifications',
+                subtitle: 'For daily updates',
+                value: smsNotifications,
+                onChanged: (value) => setState(() => smsNotifications = value),
+              ),
               NotificationItem(
-                  icon: Icons.campaign_outlined,
-                  title: 'Promotional Notifications',
-                  subtitle: 'For daily updates',
-                  value: promotionalNotifications,
-                  onChanged: (value) =>
-                      setState(() => promotionalNotifications = value)),
+                icon: Icons.campaign_outlined,
+                title: 'Promotional Notifications',
+                subtitle: 'For daily updates',
+                value: promotionalNotifications,
+                onChanged: (value) =>
+                    setState(() => promotionalNotifications = value),
+              ),
               const SizedBox(height: 20),
               Text(
                 'MORE',
@@ -146,7 +169,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                 icon: Icons.logout,
                 title: 'Logout',
                 subtitle: '',
-                onTap: () => signOut(context), // Pass context here
+                onTap: showLogoutConfirmation,
               ),
             ],
           ),
@@ -175,32 +198,26 @@ class SettingsItem extends StatelessWidget {
     return Column(
       children: [
         InkWell(
-          onTap: onTap, // Makes the entire item clickable
+          onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
             child: Row(
               children: [
-                InkWell(
-                  onTap: onTap,
-                  child: Icon(icon, size: 24),
-                ),
+                Icon(icon, size: 24),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: InkWell(
-                    onTap: onTap,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w500),
-                        ),
-                        if (subtitle.isNotEmpty)
-                          Text(subtitle,
-                              style: const TextStyle(color: Colors.grey)),
-                      ],
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w500),
+                      ),
+                      if (subtitle.isNotEmpty)
+                        Text(subtitle,
+                            style: const TextStyle(color: Colors.grey)),
+                    ],
                   ),
                 ),
                 const Icon(Icons.arrow_forward_ios),
@@ -208,7 +225,7 @@ class SettingsItem extends StatelessWidget {
             ),
           ),
         ),
-        Divider(height: 1, color: Colors.grey.shade200.withOpacity(1)),
+        Divider(height: 1, color: Colors.grey.shade200),
       ],
     );
   }
@@ -221,14 +238,14 @@ class NotificationItem extends StatelessWidget {
   final bool value;
   final ValueChanged<bool> onChanged;
 
-  const NotificationItem(
-      {Key? key,
-      required this.icon,
-      required this.title,
-      required this.subtitle,
-      required this.value,
-      required this.onChanged})
-      : super(key: key);
+  const NotificationItem({
+    Key? key,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.value,
+    required this.onChanged,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -242,7 +259,7 @@ class NotificationItem extends StatelessWidget {
           ),
           subtitle: Text(subtitle),
           trailing: Transform.scale(
-            scale: 0.9, // Adjust scale factor as needed
+            scale: 0.9,
             child: Switch(
               value: value,
               onChanged: onChanged,
@@ -250,7 +267,7 @@ class NotificationItem extends StatelessWidget {
             ),
           ),
         ),
-        Divider(height: 1, color: Colors.grey.shade200.withOpacity(1)),
+        Divider(height: 1, color: Colors.grey.shade200),
       ],
     );
   }

@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:tamang_food_service/screens/MainLayoutWithGNav.dart';
 import 'package:tamang_food_service/screens/forgetpassword_screen.dart';
 import 'package:tamang_food_service/screens/homepage_screen.dart';
 import 'package:tamang_food_service/screens/signup_screen.dart';
+import 'package:tamang_food_service/screens/widget/BottomNavProvider.dart';
 import 'package:tamang_food_service/screens/widget/custom_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -108,11 +111,13 @@ class _SigninState extends State<SigninScreen> {
 
         if (userDoc.exists) {
           // User exists in Firestore, navigate to Home Screen
-          Navigator.pushReplacement(
+          Provider.of<BottomNavProvider>(context, listen: false)
+              .resetInitialization();
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => const HomePageScreen(),
-            ),
+                builder: (context) => MainLayoutWithGNav(initialIndex: 0)),
+            (route) => false,
           );
         } else {
           // User doesn't exist in Firestore, sign them out
@@ -125,11 +130,10 @@ class _SigninState extends State<SigninScreen> {
             ),
           );
 
-          Navigator.pushReplacement(
+          Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(
-              builder: (context) => const SignUpScreen(),
-            ),
+            MaterialPageRoute(builder: (context) => const SigninScreen()),
+            (route) => false,
           );
         }
       }

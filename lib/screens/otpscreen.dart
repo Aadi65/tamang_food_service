@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
+import 'package:tamang_food_service/screens/MainLayoutWithGNav.dart';
 import 'package:tamang_food_service/screens/homepage_screen.dart';
 import 'package:tamang_food_service/screens/widget/custom_button.dart';
 
@@ -44,7 +45,9 @@ class _OtpscreenState extends State<Otpscreen> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomePageScreen(),
+            builder: (context) => MainLayoutWithGNav(
+              initialIndex: 0,
+            ),
           ),
           (Route<dynamic> route) => false,
         );

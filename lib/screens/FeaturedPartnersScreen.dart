@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:tamang_food_service/screens/RestaurantMenu.dart';
 import 'package:tamang_food_service/screens/homepage_screen.dart';
+import 'package:tamang_food_service/screens/widget/BottomNavProvider.dart';
 
 class FeaturedPartnersScreen extends StatefulWidget {
   const FeaturedPartnersScreen({super.key});
@@ -16,10 +18,8 @@ class _FeaturedPartnersScreenState extends State<FeaturedPartnersScreen> {
     return WillPopScope(
       onWillPop: () async {
         // Navigate to HomePageScreen instead of closing the app
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePageScreen()),
-        );
+        Navigator.pop(context);
+        Provider.of<BottomNavProvider>(context, listen: false).setIndex(0);
         return false; // Prevent default back behavior (app closing)
       },
       child: Scaffold(

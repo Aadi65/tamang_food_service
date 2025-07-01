@@ -38,6 +38,8 @@ dependencies:
   pinput: ^5.0.1
   carousel_slider: ^5.0.0
   smooth_page_indicator: ^1.2.0+3
+  google_nav_bar: ^5.0.7
+  provider: ^6.1.4
   flutter_riverpod: ^2.6.1
   flutter:
     sdk: flutter
@@ -107,6 +109,12 @@ flutter:
     - assets/food4.png
     - assets/food5.png
     - assets/food6.png
+    - assets/s1.png.png
+    - assets/s2.png.png
+    - assets/s3.png.png
+    - assets/s4.png.png
+    - assets/s5.png.png
+    - assets/s6.png.png
   
    
 

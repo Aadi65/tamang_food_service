@@ -38,6 +38,17 @@ class _RestaurantMenuState extends State<RestaurantMenu>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 1,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context); // ✅ go back to FeaturedPartnersScreen
+          },
+        ),
+      ),
       body: SafeArea(
         // Ensures content starts after the notch
         child: SingleChildScrollView(

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tamang_food_service/screens/MainLayoutWithGNav.dart';
 import 'package:tamang_food_service/screens/homepage_screen.dart';
 import 'package:tamang_food_service/screens/welcome_screen.dart';
 
@@ -17,7 +18,7 @@ class _WrapperState extends State<Wrapper> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const HomePageScreen();
+            return MainLayoutWithGNav();
           } else {
             return const WelcomeScreen();
           }
