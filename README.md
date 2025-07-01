@@ -2,9 +2,7 @@
 
 **Tamang Food Service** is your ultimate food delivery companion — bringing delicious, affordable meals from your favorite local restaurants straight to your doorstep. Whether you're craving a cheesy pizza, spicy snacks, or homestyle comfort food, we've got you covered — all in just a few taps!
 
-<div align="center">
-  <img src="assets/screenshots/home_screen.png" alt="Tamang Food Service App Screenshot" width="300" />
-</div>
+
 
 ---
 
