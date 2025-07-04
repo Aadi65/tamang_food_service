@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tamang_food_service/screens/MainLayoutWithGNav.dart';
-import 'package:tamang_food_service/screens/homepage_screen.dart';
-import 'package:tamang_food_service/screens/welcome_screen.dart';
+import 'package:tamang_food_service/screens/layout/MainLayoutWithGNav.dart';
+import 'package:tamang_food_service/walkthrough/welcome_screen.dart';
 
 class Wrapper extends StatefulWidget {
   const Wrapper({super.key});

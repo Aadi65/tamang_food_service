@@ -2,12 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:tamang_food_service/screens/MainLayoutWithGNav.dart';
-import 'package:tamang_food_service/screens/forgetpassword_screen.dart';
-import 'package:tamang_food_service/screens/homepage_screen.dart';
-import 'package:tamang_food_service/screens/signup_screen.dart';
-import 'package:tamang_food_service/screens/widget/BottomNavProvider.dart';
-import 'package:tamang_food_service/screens/widget/custom_button.dart';
+import 'package:tamang_food_service/screens/layout/MainLayoutWithGNav.dart';
+import 'package:tamang_food_service/screens/authentication/forgetpassword_screen.dart';
+import 'package:tamang_food_service/screens/home/homepage_screen.dart';
+import 'package:tamang_food_service/screens/authentication/signup_screen.dart';
+import 'package:tamang_food_service/screens/custom_widget/BottomNavProvider.dart';
+import 'package:tamang_food_service/screens/custom_widget/custom_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

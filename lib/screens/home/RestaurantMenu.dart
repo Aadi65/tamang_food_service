@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tamang_food_service/screens/widget/fooditem.dart';
+import 'package:tamang_food_service/screens/custom_widget/fooditem.dart';
 
 class RestaurantMenu extends StatefulWidget {
   final Map<String, String> partner;

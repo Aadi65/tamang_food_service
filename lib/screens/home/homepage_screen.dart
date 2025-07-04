@@ -3,14 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:tamang_food_service/screens/FeaturedPartnersScreen.dart';
-import 'package:tamang_food_service/screens/signin_screen.dart';
-import 'package:tamang_food_service/screens/widget/DeliveryLocationHeader.dart';
-import 'package:tamang_food_service/screens/widget/location_banner.dart';
-import 'package:tamang_food_service/screens/widget/partner_item.dart';
-import 'package:tamang_food_service/screens/widget/restaurant_card.dart';
-import 'package:tamang_food_service/screens/widget/restaurant_tile.dart';
-import 'package:tamang_food_service/screens/widget/section_title.dart';
+import 'package:tamang_food_service/screens/home/FeaturedPartnersScreen.dart';
+import 'package:tamang_food_service/screens/authentication/signin_screen.dart';
+import 'package:tamang_food_service/screens/custom_widget/DeliveryLocationHeader.dart';
+import 'package:tamang_food_service/screens/custom_widget/location_banner.dart';
+import 'package:tamang_food_service/screens/custom_widget/partner_item.dart';
+import 'package:tamang_food_service/screens/custom_widget/restaurant_card.dart';
+import 'package:tamang_food_service/screens/custom_widget/restaurant_tile.dart';
+import 'package:tamang_food_service/screens/custom_widget/section_title.dart';
 
 class HomePageScreen extends StatefulWidget {
   const HomePageScreen({super.key});

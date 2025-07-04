@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
-import 'package:tamang_food_service/screens/MainLayoutWithGNav.dart';
-import 'package:tamang_food_service/screens/widget/custom_button.dart';
+import 'package:tamang_food_service/screens/layout/MainLayoutWithGNav.dart';
+import 'package:tamang_food_service/screens/custom_widget/custom_button.dart';
 
 class Otpscreen extends StatefulWidget {
   final String vid;

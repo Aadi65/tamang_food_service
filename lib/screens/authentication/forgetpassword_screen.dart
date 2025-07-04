@@ -1,10 +1,21 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tamang_food_service/screens/forgetpassword_screen.dart';
-import 'package:tamang_food_service/screens/widget/custom_button.dart';
+//import 'package:tamang_food_service/screens/forgetpassword_screen2.dart';
+import 'package:tamang_food_service/screens/custom_widget/custom_button.dart';
 
-class ForgetPasswordScreen2 extends StatelessWidget {
-  const ForgetPasswordScreen2({super.key});
+class ForgetPasswordScreen extends StatefulWidget {
+  const ForgetPasswordScreen({super.key});
+
+  @override
+  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
+}
+
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+  TextEditingController email = TextEditingController();
+  reset() async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email.text);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +51,7 @@ class ForgetPasswordScreen2 extends StatelessWidget {
               ),
               const SizedBox(height: 40),
               Text(
-                'Reset email sent ',
+                'Forgot Password ',
                 style: GoogleFonts.poppins(
                   fontSize: 35,
                   fontWeight: FontWeight.w300,
@@ -49,30 +60,36 @@ class ForgetPasswordScreen2 extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                'We have sent a instructions email to sajin tamang@figma.com.',
+                'Enter your email address and we will send you a reset instructions.',
                 style: GoogleFonts.poppins(
                   fontSize: 17,
                   fontWeight: FontWeight.w300,
                   color: Colors.black.withOpacity(0.5),
                 ),
               ),
+              const SizedBox(height: 24),
+              TextField(
+                controller: email,
+                decoration: const InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                  label: Text(
+                    'EMAIL ADDRESS',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
               const SizedBox(height: 25),
               custom_button(
                 onpressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ForgetPasswordScreen(),
-                    ),
-                  );
+                  reset();
                 },
-                buttonText: 'SEND AGAIN',
+                buttonText: 'RESET PASSWORD',
                 fontsize: 19,
-              ),
-              const SizedBox(height: 123),
-              Padding(
-                padding: const EdgeInsets.only(left: 30),
-                child: Image.asset('assets/Open Doodles.png'),
               ),
             ],
           ),

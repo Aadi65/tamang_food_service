@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:tamang_food_service/screens/widget/BottomNavProvider.dart';
+import 'package:tamang_food_service/screens/custom_widget/BottomNavProvider.dart';
 
-import 'AccountSettingsScreen.dart';
-import 'OrderScreen.dart';
-import 'SearchScreen.dart';
-import 'homepage_screen.dart';
+import '../accounts/AccountSettingsScreen.dart';
+import '../home/OrderScreen.dart';
+import '../home/SearchScreen.dart';
+import '../home/homepage_screen.dart';
 
 class MainLayoutWithGNav extends StatelessWidget {
   final int initialIndex;

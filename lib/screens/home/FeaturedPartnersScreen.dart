@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:tamang_food_service/screens/RestaurantMenu.dart';
-import 'package:tamang_food_service/screens/homepage_screen.dart';
-import 'package:tamang_food_service/screens/widget/BottomNavProvider.dart';
+import 'package:tamang_food_service/screens/home/RestaurantMenu.dart';
+import 'package:tamang_food_service/screens/home/homepage_screen.dart';
+import 'package:tamang_food_service/screens/custom_widget/BottomNavProvider.dart';
 
 class FeaturedPartnersScreen extends StatefulWidget {
   const FeaturedPartnersScreen({super.key});

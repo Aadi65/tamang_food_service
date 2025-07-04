@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tamang_food_service/screens/signin_screen.dart';
-import 'package:tamang_food_service/screens/widget/custom_button.dart';
+import 'package:tamang_food_service/screens/authentication/signin_screen.dart';
+import 'package:tamang_food_service/screens/custom_widget/custom_button.dart';
 import 'walkthrough_contents.dart';
 
 class WalkthroughScreen extends StatefulWidget {

@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:tamang_food_service/database.dart';
-import 'package:tamang_food_service/screens/phoneNumberScreen.dart';
-import 'package:tamang_food_service/screens/signin_screen.dart';
+import 'package:tamang_food_service/database/database.dart';
+import 'package:tamang_food_service/screens/authentication/phoneNumberScreen.dart';
+import 'package:tamang_food_service/screens/authentication/signin_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});

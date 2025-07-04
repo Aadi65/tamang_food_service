@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tamang_food_service/screens/otpscreen.dart';
-import 'package:tamang_food_service/screens/widget/custom_button.dart';
+import 'package:tamang_food_service/screens/authentication/otpscreen.dart';
+import 'package:tamang_food_service/screens/custom_widget/custom_button.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class Phonenumberscreen extends StatefulWidget {
