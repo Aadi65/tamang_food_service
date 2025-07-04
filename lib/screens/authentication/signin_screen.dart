@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:tamang_food_service/screens/layout/MainLayoutWithGNav.dart';
 import 'package:tamang_food_service/screens/authentication/forgetpassword_screen.dart';
-import 'package:tamang_food_service/screens/home/homepage_screen.dart';
 import 'package:tamang_food_service/screens/authentication/signup_screen.dart';
 import 'package:tamang_food_service/screens/custom_widget/BottomNavProvider.dart';
 import 'package:tamang_food_service/screens/custom_widget/custom_button.dart';
@@ -83,6 +82,7 @@ class _SigninState extends State<SigninScreen> {
 
   void login() async {
     try {
+      // ignore: body_might_complete_normally_catch_error
       await GoogleSignIn().disconnect().catchError((_) {});
       await GoogleSignIn().signOut();
 

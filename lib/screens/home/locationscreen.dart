@@ -12,7 +12,6 @@ class Locationscreen extends StatefulWidget {
 }
 
 class _LocationscreenState extends State<Locationscreen> {
-  @override
   void afterLogin() {
     // After the user logs in, check for location permissions
     _checkAndRequestLocationPermission();
