@@ -99,7 +99,7 @@ class _WalkthroughState extends State<WalkthroughScreen> {
                             color: Colors.black,
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 1),
                         Text(
                           textAlign: TextAlign.center,
                           contents[i].description,

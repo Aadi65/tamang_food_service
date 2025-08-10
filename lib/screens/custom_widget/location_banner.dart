@@ -17,20 +17,17 @@ class LocationBanner extends StatelessWidget {
             "DELIVERY TO",
             style: TextStyle(fontSize: 14, color: Color(0xFFFBC02D)),
           ),
+          const SizedBox(height: 2),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
                 location,
                 style: const TextStyle(
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
                 ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.arrow_drop_down, color: Colors.black),
-                onPressed: () {},
               ),
             ],
           ),

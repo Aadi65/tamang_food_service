@@ -71,7 +71,7 @@ class WelcomeScreen extends StatelessWidget {
                     color: Colors.black.withOpacity(0.5),
                   ),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 60),
                 custom_button(
                   onpressed: () {
                     Navigator.push(
